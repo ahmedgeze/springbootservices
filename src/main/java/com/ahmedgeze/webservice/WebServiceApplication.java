@@ -15,6 +15,7 @@ public class WebServiceApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = SpringApplication.run(WebServiceApplication.class, args);
+		System.out.println("aaaaa");
 		applicationContext.getBean(StudentController.class);
 	}
 }
