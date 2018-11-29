@@ -16,4 +16,8 @@ public class StudentManager {
     public List<Student> findByName(String name){
         return studentRepository.findByName(name);
     }
+
+    public Student saveStudent(Student student){
+        return studentRepository.save(student);
+    }
 }

@@ -18,6 +18,9 @@ public class StudentController {
 
     @RequestMapping(value = "findByName", method = {RequestMethod.GET})
     public List<Student> findByName(@RequestParam String name) {
+        Student   ahmet=new Student();
+        ahmet.setName("geze");
+        studentManager.saveStudent(ahmet);
         return studentManager.findByName(name);
     }
 
