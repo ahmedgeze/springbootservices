@@ -11,6 +11,7 @@ import com.ahmedgeze.webservice.model.bittrex.getorderbook.GetOrderBookObject;
 import com.ahmedgeze.webservice.model.bittrex.getticker.GetTickerObject;
 import com.ahmedgeze.webservice.repository.CoinRepository;
 import com.ahmedgeze.webservice.response.BaseResponse;
+import com.ahmedgeze.webservice.response.UniqueKurResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,39 +33,56 @@ public class PublicBittrexApiImpl implements PublicBittrexApi {
     final String uri = "https://bittrex.com/api/v1.1/public";
 
     public List<String> distinctKur() throws IOException {
-        GetMarketsObject markets=getAllMarkets();
-        List<Result> getMarketResult=markets.getResult();
-        List<String> kurList =new ArrayList<>();
-        for (Result result:getMarketResult){
-            if (!(kurList.contains(result.getBaseCurrency()))){
+        GetMarketsObject markets = getAllMarkets();
+        List<Result> getMarketResult = markets.getResult();
+        List<String> kurList = new ArrayList<>();
+        for (Result result : getMarketResult) {
+            if (!(kurList.contains(result.getBaseCurrency()))) {
                 kurList.add(result.getBaseCurrency());
             }
         }
         return kurList;
     }
 
+
     public List<String> controlKurFromDb() throws IOException {
-        List<String> kurListFromBittrex =distinctKur();
-        List<Kur> kurList=coinRepository.findByKurIn(kurListFromBittrex);
+        List<String> kurListFromBittrex = distinctKur();
+        List<Kur> kurList = coinManager.findByKurIn(kurListFromBittrex);
         List<String> kurListStringFromDb = new ArrayList<>();
-        for(Kur kurFromDb:kurList){
+        for (Kur kurFromDb : kurList) {
             kurListStringFromDb.add(kurFromDb.getKur());
         }
 
         kurListFromBittrex.removeAll(kurListStringFromDb);
         System.out.println(kurListFromBittrex);
 
-        return  kurListFromBittrex;
+        return kurListFromBittrex;
 
 
     }
 
+    @Override
+    public BaseResponse saveAllKur() throws IOException {
+        BaseResponse baseResponse = new BaseResponse();
+        List<String> saveList = controlKurFromDb();
+        List<Kur> savedObject = new ArrayList<>();
+        for (String kur : saveList) {
+            Kur kurObj = new Kur();
+            kurObj.setKur(kur);
+            savedObject.add(kurObj);
+        }
+        baseResponse.setOperationCode(BaseResponse.SUCCESS_CODE);
+        baseResponse.setOperationMessage("Successfully Insert Process");
+        baseResponse.setOperationSuccess(true);
+
+        return baseResponse;
+
+    }
 
 
-
-    public BaseResponse saveKur(String kurName){
-        BaseResponse response= new BaseResponse();
-        Kur kur=new Kur();
+    public BaseResponse saveKur(String kurName) {
+        BaseResponse response = new BaseResponse();
+        Kur kur = new Kur();
         kur.setKur(kurName);
         coinManager.saveKur(kur);
         response.setOperationCode(BaseResponse.SUCCESS_CODE);
@@ -137,8 +155,6 @@ public class PublicBittrexApiImpl implements PublicBittrexApi {
 
 
     }
-
-
 
 
 }

@@ -22,6 +22,10 @@ public class CoinManager {
         return coinRepository.findByKur("BTC");
     }
 
+    public List<Kur> findByKurIn(List<String> kurList){
+        return coinRepository.findByKurIn(kurList);
+    }
+
 
 
 

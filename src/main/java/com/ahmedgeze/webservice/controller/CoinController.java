@@ -1,12 +1,14 @@
 package com.ahmedgeze.webservice.controller;
 
 
+import com.ahmedgeze.webservice.entity.Kur;
 import com.ahmedgeze.webservice.model.bittrex.getcurrencies.GetCurrenciesObject;
 import com.ahmedgeze.webservice.model.bittrex.getmarkethistory.GetMarketHistoryObject;
 import com.ahmedgeze.webservice.model.bittrex.getmarkets.GetMarketsObject;
 import com.ahmedgeze.webservice.model.bittrex.getmarketsummaries.GetMarketSummariesObject;
 import com.ahmedgeze.webservice.model.bittrex.getorderbook.GetOrderBookObject;
 import com.ahmedgeze.webservice.model.bittrex.getticker.GetTickerObject;
+import com.ahmedgeze.webservice.repository.CoinRepository;
 import com.ahmedgeze.webservice.response.BaseResponse;
 import com.ahmedgeze.webservice.response.UniqueKurResponse;
 import com.ahmedgeze.webservice.service.PublicBittrexApiImpl;
@@ -17,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "coin")
 public class CoinController {
+
+    @Autowired
+    private CoinRepository coinRepository;
 
     @Autowired
     private PublicBittrexApiImpl publicBittrexApi;
@@ -93,7 +99,7 @@ public class CoinController {
     @RequestMapping(value = "getKur", method = {RequestMethod.POST, RequestMethod.GET})
     public BaseResponse getKur() throws IOException {
         UniqueKurResponse response = new UniqueKurResponse();
-        List<String> uniqueKur=publicBittrexApi.distinctKur();
+        List<String> uniqueKur = publicBittrexApi.distinctKur();
         response.setKurList(uniqueKur);
         return response;
     }
@@ -101,12 +107,19 @@ public class CoinController {
     @RequestMapping(value = "getKurDistinct", method = {RequestMethod.POST, RequestMethod.GET})
     public BaseResponse getKurDistinct() throws IOException {
         UniqueKurResponse response = new UniqueKurResponse();
-        List<String> uniqueKur=publicBittrexApi.controlKurFromDb();
+        List<String> uniqueKur = publicBittrexApi.controlKurFromDb();
         response.setKurList(uniqueKur);
         response.setOperationCode(BaseResponse.SUCCESS_CODE);
         response.setOperationSuccess(true);
         response.setOperationMessage("Success with distinct Kur");
         return response;
+    }
+
+
+    @RequestMapping(value = "saveDistinctKur", method = {RequestMethod.POST, RequestMethod.GET})
+    public BaseResponse saveDistinctKur() throws IOException {
+        return publicBittrexApi.saveAllKur();
+
     }
 
 

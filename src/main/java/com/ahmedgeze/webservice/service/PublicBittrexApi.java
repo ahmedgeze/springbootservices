@@ -6,6 +6,7 @@ import com.ahmedgeze.webservice.model.bittrex.getmarkets.GetMarketsObject;
 import com.ahmedgeze.webservice.model.bittrex.getmarketsummaries.GetMarketSummariesObject;
 import com.ahmedgeze.webservice.model.bittrex.getorderbook.GetOrderBookObject;
 import com.ahmedgeze.webservice.model.bittrex.getticker.GetTickerObject;
+import com.ahmedgeze.webservice.response.BaseResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +25,14 @@ public interface PublicBittrexApi {
 
      GetMarketHistoryObject getMarketHistory(String url) throws  IOException;
 
+
+
+     /// DATA Processing Services
+
      List<String> controlKurFromDb() throws IOException;
+
+     List<String> distinctKur() throws IOException;
+
+     BaseResponse saveAllKur() throws  IOException;
 
 }
