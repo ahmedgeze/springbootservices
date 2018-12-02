@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class StudentManager {
+public class  StudentManager {
 
     @Autowired
     private StudentRepository studentRepository;
@@ -20,4 +20,6 @@ public class StudentManager {
     public Student saveStudent(Student student){
         return studentRepository.save(student);
     }
+
+
 }

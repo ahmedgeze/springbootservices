@@ -8,10 +8,11 @@ import com.ahmedgeze.webservice.model.bittrex.getorderbook.GetOrderBookObject;
 import com.ahmedgeze.webservice.model.bittrex.getticker.GetTickerObject;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface PublicBittrexApi {
 
-     GetMarketsObject getAllMarkets(String url) throws IOException;
+     GetMarketsObject getAllMarkets() throws IOException;
 
      GetCurrenciesObject getCurrencies(String url) throws IOException;
 
@@ -22,5 +23,7 @@ public interface PublicBittrexApi {
      GetOrderBookObject getOrderBook(String url) throws  IOException;
 
      GetMarketHistoryObject getMarketHistory(String url) throws  IOException;
+
+     List<String> controlKurFromDb() throws IOException;
 
 }
