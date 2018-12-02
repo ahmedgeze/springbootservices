@@ -111,6 +111,7 @@ public class PublicBittrexApiImpl implements PublicBittrexApi {
         GetCurrenciesObject obj = new GetCurrenciesObject();
         ObjectMapper mapper = new ObjectMapper();
         obj = mapper.readValue(result, GetCurrenciesObject.class);
+        System.out.println("alo");
         return obj;
     }
 
